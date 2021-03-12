@@ -1,62 +1,87 @@
-const container = document.querySelector('.container');
-const buttons = document.querySelectorAll('.colorPick');
-let choice = 'black';
-drawgrid(16);
+const buttons = document.querySelectorAll("button");
+const screen = document.querySelector(".screen");
 
+let pixel = ''; 
+let gridsize = 50;
 
-function clrscreen () {
-    container.innerHTML = '';
-    let gridsize = prompt('please enter a new grid size of not more than 100', 16);
-    if(gridsize > 100){
-        gridsize = 100;
+const drawGrid = (screenSize) => {
+  for(i = 0; i < screenSize ** 2; i++) {
+    pixel = document.createElement('div')
+    pixel.classList.add("pixel");
+    pixel.style.backgroundColor = 'white';
+    screen.appendChild(pixel);
+  }
+  screen.style.gridTemplateColumns =  `repeat(${screenSize}, auto)`;
+  screen.style.gridTemplateRows =  `repeat(${screenSize}, auto)`;
+}
+
+drawGrid(gridsize);
+
+const clear = (request) => {
+  if(request === 'resize'){
+    gridsize = prompt('please enter a new grid size of not more than 100', 50);
+    if(gridsize > 100 || gridsize === null){
+    gridsize = 100;
+  }
+  }
+  screen.innerHTML = '';
+  drawGrid(gridsize);
+  active();
+}
+
+let currentMode = 'black';
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    if(button.id === 'resize' || button.id === 'clear'){
+      clear(button.id);
     }
-    drawgrid(gridsize);
-}
-
-for(let button of buttons){
-        button.addEventListener('click', function(e){ 
-        choice = button.id;
-        clrscreen(); 
-    })
-}
-
-function drawgrid(size){
-    for(i = 0; i < size ** 2; i++){
-        const newDiv = document.createElement('div');
-        newDiv.className = 'pixel';
-        newDiv.style.display = 'flex'
-        container.appendChild(newDiv);
+    else{
+      currentMode = button.id;
+      clear(button.id);
     }
-    container.style.gridTemplateColumns =  `repeat(${size}, auto)`;
-    container.style.gridTemplateRows =  `repeat(${size}, auto)`;
-    pixels = document.querySelectorAll('.pixel');
+  });
+});
 
-    let indxblck = 100;
-    for(let pixel of pixels) {
-        pixel.addEventListener('mouseover', function(e){
-            let currentClr = getComputedStyle(pixel, null).getPropertyValue('background-color');
-            currentClr = currentClr.substr(4, currentClr.length - 2);
-            currentClr = currentClr.replace('(', '');
-            currentClr = currentClr.replace(')', '');
-            currentClr = currentClr.split(',');
-            currentClr[0] = parseInt(currentClr[0]); 
-            currentClr[1] = parseInt(currentClr[1]);
-            currentClr[2] = parseInt(currentClr[2]);
-            switch(choice){
-                case 'black':
-                    e.target.style.backgroundColor = 'black';
-                    break;
-                case  'colors':
-                    e.target.style.backgroundColor = `rgb(${parseInt(( Math.random() * 255 ))}, ${parseInt(( Math.random() * 255 ))},${parseInt(( Math.random() * 255 ))})`;
-                    break;
-                case 'shading':
-                    if(currentClr[0] == 0){
-                        e.target.style.backgroundColor = `rgb(${currentClr[0] + 101}, ${currentClr[1] + 101}, ${currentClr[2] + 101}`;
-                    }
-                    else if(currentClr[0] > 1){
-                        e.target.style.backgroundColor = `rgb(${currentClr[0] - 10}, ${currentClr[1] - 10}, ${currentClr[2] - 10}`;
-                    }
-            }
-            });
+const randomColor = () => {
+  let color = 'rgba(';
+  for(let i = 0;i< 3;i++){
+    color += Math.floor(Math.random() * 255) + ',';
+  }
+  return color + '1)';
 }
+
+const shading = (clr) => {
+  let color = 'rgba(';
+  clr = parseInt(clr.substr(4, clr.indexOf(',') - 4));
+  if(clr === 255){
+    clr = 100;
+  }
+  else if(clr > 0){
+    clr -= 5;
+  }
+  for(let i = 0;i< 3;i++){
+    color += clr + ',';
+  }
+  return color + '1)';
 }
+
+
+const active = () => {
+  let pixels = document.querySelectorAll(".pixel");
+  pixels.forEach(pxl => { 
+    pxl.addEventListener('mouseover', (e) => {
+      let crntClr = getComputedStyle(pxl, null).getPropertyValue('background-color');
+      switch(currentMode){
+        case 'black':
+          e.target.style.backgroundColor = 'rgba(0,0,0)';
+          break;
+        case 'colors':
+          e.target.style.backgroundColor = randomColor();
+          break;
+        case 'shading':
+          e.target.style.backgroundColor = shading(crntClr);
+      }
+    });
+  });
+}
+active();

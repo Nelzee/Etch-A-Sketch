@@ -1,33 +1,39 @@
-html {
-    background-color: rgb(82, 80, 80);
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.heading {
-    text-align: center;
-    color: rgb(219, 73, 73)
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  color: #fff;
 }
-.buttons {
-    text-align: center;
-    padding: 1em;
-    margin-right: 20px;
-}
-.buttons button {
-    border-radius: 30%;
-}
-.buttons button:hover {
-    background-color: rgb(219, 73, 73);
-    
-}
-
 .container {
-    background-color: white;
-    display: grid;
-    width: 40%;
-    height: 75%;
-    border: rgb(219, 73, 73) solid 10px;
-    margin: auto;
+  margin: 0 auto;
+  padding: 20px;
+  width: 900px;
+  background-color: purple;
+}
+.container .buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 
-.pixel {
-    display: flex;
+.container .buttons button {
+  width: 150px;
+  height: 60px;
+  background: green;
+  border-radius: 25%;
+  font-size: 2rem;
+  color: white;
+}
+
+.container .screen {
+  display: grid;
+  width: 800px;
+  height: 800px;
+  border: 5px solid green;
+  margin: 20px auto;
 }

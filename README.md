@@ -1,1 +1,1 @@
-this is my etch a sketch project and it really tested my javascript knowledge and my ability to make logical decisions it features a normal black on white background mode a random color mode and a shading mode that gets darker the more you stroke 
+this is my etch a sketch project and it really tested my javascript knowledge and my ability to make logical decisions it features a normal black no white background mode a random color mode and a shading mode that gets darker the more you stroke 
